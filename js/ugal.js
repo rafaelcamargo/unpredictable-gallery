@@ -43,25 +43,27 @@ var ugal = function(){
 	function setupPositionCoordinates(){
 		coords = [];
 		for (var i = 0; i < vLength; i++){
+			var line = [];
 			var y = (unity.minHeight * i) + (i*fspace) + fspace;
 			for (var j = 0; j < hLength; j++) {
 				var x = (unity.minWidth * j) + (j*fspace) + fspace;
-				coords.push({
+				line.push({
 					'x': x,
 					'y': y,
-					'available': false
+					'available': true
 				});
 			}
+			coords.push(line);
 		}
 	}
 
 	function setupFrames(){
 		var usedArea = 0;
 		for (var i = 0; i < getMaxPossibleFrames(); i++) {
-			var fsize = setFrameSize();
-			usedArea += fsize.width() * fsize.height();
+			var fSize = setFrameSize();
+			usedArea += fSize.width() * fSize.height();
 			if(usedArea < getMaxPossibleArea())
-				renderFrame(drawFrame(fsize, i));
+				renderFrame(drawFrame(fSize, i));
 		}
 	}
 
@@ -94,20 +96,69 @@ var ugal = function(){
 			return getFrameRandUnities();
 	}
 
-	function drawFrame(fsize, pos){
+	function drawFrame(fSize, pos){
 		var fTag = document.createElement('div');
-		fTag.style.width = fsize.width  + UNITY_OF_MEASURE;
-		fTag.style.height = fsize.height  + UNITY_OF_MEASURE;
-		fTag.style.position = 'absolute';
-		fTag.style.top = coords[pos].y + UNITY_OF_MEASURE;
-		fTag.style.left = coords[pos].x + UNITY_OF_MEASURE;
-		if(!fTag.style.backgroundColor)
-			fTag.style.backgroundColor = DEFAULT_COLORS.FRAME_BACKGROUND;
+		defineFramePosition(fTag);
+		defineFrameSize(fTag, fSize);
+		defineFrameCoords(fTag, fSize);
+		defineFrameBackground(fTag);
 		return fTag;
 	}
 
-	function renderFrame(fdrawn){
-		container.appendChild(fdrawn);
+	function defineFramePosition(fTag){
+		fTag.style.position = 'absolute';
+	}
+
+	function defineFrameSize(fTag, fSize){
+		fTag.style.width = fSize.width()  + UNITY_OF_MEASURE;
+		fTag.style.height = fSize.height()  + UNITY_OF_MEASURE;
+	}
+
+	function defineFrameCoords(fTag, fSize){
+		var coords = getFrameCoords(fSize);
+		fTag.style.top = coords.y + UNITY_OF_MEASURE;
+		fTag.style.left = coords.x + UNITY_OF_MEASURE;
+	}
+
+	function defineFrameBackground(fTag){
+		fTag.style.backgroundColor = DEFAULT_COLORS.FRAME_BACKGROUND;
+	}
+
+	function getFrameCoords(fSize){
+		for (var i = 0; i < coords.length; i++) {
+			for (var j = 0; j < coords[i].length; j++)
+				if(coordsAreAvailable(coords, i, j, fSize))
+					return applyCoords(coords, fSize, i, j);
+		};
+	}
+
+	function coordsAreAvailable(coords, i, j, fSize){
+		return xCoordIsAvailable(coords, i, j, fSize.hSize)
+			&& yCoordIsAvailable(coords, i, j, fSize.vSize);
+	}
+
+	function xCoordIsAvailable(coords, i, j, hSize){
+		return coords[i][j].available && coords[i][j+hSize] && coords[i][j+hSize].available;
+	}
+
+	function yCoordIsAvailable(coords, i, j, vSize){
+		return coords[i][j].available && coords[i+vSize] && coords[i+vSize][j] && coords[i+vSize][j].available;
+	}
+
+	function applyCoords(coords, fSize, i, j){
+		markCoordsAsUnavailable(coords, fSize, i, j)
+		return coords[i][j];
+	}
+
+	function markCoordsAsUnavailable(coords, fSize, i, j){
+		for (var v = i; v < i+fSize.vSize; v++){
+			for (var h = j; h < j+fSize.hSize; h++)
+				coords[v][h].available = false;
+		};
+	}
+
+	function renderFrame(fTag){
+		container.appendChild(fTag);
 	}
 
 	return {
