@@ -5,7 +5,7 @@ var ugal = function(){
 		CONTAINER_BACKGROUND: '#000',
 		FRAME_BACKGROUND: '#333'
 	};
-	var container, hLength, vLength, unity, coords, fspace;
+	var container, width, height, hLength, vLength, unity, coords, fspace;
 
 	function init(params){
 		console.log('ugal started...');
@@ -48,19 +48,21 @@ var ugal = function(){
 				var x = (unity.minWidth * j) + (j*fspace) + fspace;
 				coords.push({
 					'x': x,
-					'y': y
+					'y': y,
+					'available': false
 				});
-			};
+			}
 		}
 	}
 
 	function setupFrames(){
-		//var maxPossibleArea = getMaxPossibleArea();
+		var usedArea = 0;
 		for (var i = 0; i < getMaxPossibleFrames(); i++) {
 			var fsize = setFrameSize();
-			var fdrawn = drawFrame(fsize, i);
-			renderFrame(fdrawn);
-		};
+			usedArea += fsize.width() * fsize.height();
+			if(usedArea < getMaxPossibleArea())
+				renderFrame(drawFrame(fsize, i));
+		}
 	}
 
 	function getMaxPossibleFrames(){
@@ -68,19 +70,25 @@ var ugal = function(){
 	}
 
 	function getMaxPossibleArea(){
-		return (unity.width * hLength) * (unity.height * vLength);
+		return (unity.minWidth * hLength) * (unity.minHeight * vLength);
 	}
 
 	function setFrameSize(){
 		return {
-			'width': parseInt(getFrameRandUnities() * unity.minWidth),
-			'height': parseInt(getFrameRandUnities() * unity.minHeight)
+			'hSize': getFrameRandUnities(),
+			'vSize': getFrameRandUnities(),
+			'width': function(){
+				return parseInt(this.hSize * unity.minWidth);
+			},
+			'height': function(){
+				return parseInt(this.vSize * unity.minHeight);
+			}
 		};
 	}
 
 	function getFrameRandUnities(){
 		var unities = parseInt(Math.random() * 10);
-		if(unities && unities < 2)
+		if(unities && unities < 3)
 			return unities;
 		else
 			return getFrameRandUnities();
