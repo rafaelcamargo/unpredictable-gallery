@@ -17,7 +17,7 @@ function renderUgal(){
 		height: getUgalContainerHeight(),
 		hLength: 5,
 		vLength: 3,
-		fspace: 1
+		fSpace: 1
 	});
 }
 
