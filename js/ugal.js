@@ -5,13 +5,13 @@ var ugal = function(){
 		CONTAINER_BACKGROUND: '#000',
 		FRAME_BACKGROUND: '#333'
 	};
-	var container, width, height, hLength, vLength, unity, coords, fspace;
+
+	var container, width, height, hLength, vLength, fSpace, coords, usedArea, unity;
 
 	function init(params){
-		console.log('ugal started...');
 		resetParams(params);
 		setupContainer();
-		setupUnityValues();
+		setupMinUnityValues();
 		setupPositionCoordinates();
 		setupFrames();
 	}
@@ -22,7 +22,10 @@ var ugal = function(){
 		height = parseInt(params.height);
 		hLength = params.hLength;
 		vLength = params.vLength;
-		fspace = params.fspace;
+		fSpace = params.fSpace;
+		usedArea = 0;
+		coords = [];
+		unity = {};
 	}
 
 	function setupContainer(){
@@ -33,20 +36,21 @@ var ugal = function(){
 			container.style.backgroundColor = DEFAULT_COLORS.CONTAINER_BACKGROUND;
 	}
 
-	function setupUnityValues(){
-		unity = {
-			'minWidth': parseInt(width/hLength) - fspace,
-			'minHeight': parseInt(height/vLength) - fspace
-		};
+	function setupMinUnityValues(){
+		unity.minWidth = getMinUnityValue(width, hLength)
+		unity.minHeight = getMinUnityValue(height, vLength);
+	}
+
+	function getMinUnityValue(valType, val){
+		return parseInt(valType/val) - fSpace;
 	}
 
 	function setupPositionCoordinates(){
-		coords = [];
 		for (var i = 0; i < vLength; i++){
 			var line = [];
-			var y = (unity.minHeight * i) + (i*fspace) + fspace;
+			var y = (unity.minHeight * i) + (i*fSpace) + fSpace;
 			for (var j = 0; j < hLength; j++) {
-				var x = (unity.minWidth * j) + (j*fspace) + fspace;
+				var x = (unity.minWidth * j) + (j*fSpace) + fSpace;
 				line.push({
 					'x': x,
 					'y': y,
@@ -58,12 +62,11 @@ var ugal = function(){
 	}
 
 	function setupFrames(){
-		var usedArea = 0;
-		for (var i = 0; i < getMaxPossibleFrames(); i++) {
-			var fSize = setFrameSize();
-			usedArea += fSize.width() * fSize.height();
-			if(usedArea < getMaxPossibleArea())
-				renderFrame(drawFrame(fSize, i));
+		var fBuilt;
+		while(usedArea < getMaxPossibleArea()){
+			fBuilt = drawFrame(buildFrame());
+			if(fBuilt.style.top && fBuilt.style.left)
+				renderFrame(fBuilt);
 		}
 	}
 
@@ -75,86 +78,141 @@ var ugal = function(){
 		return (unity.minWidth * hLength) * (unity.minHeight * vLength);
 	}
 
-	function setFrameSize(){
+	function buildFrame(){
 		return {
 			'hSize': getFrameRandUnities(),
 			'vSize': getFrameRandUnities(),
-			'width': function(){
-				return parseInt(this.hSize * unity.minWidth);
+			'getDimension': function(size, direction){
+				var minUnity = unity.minWidth;
+				if(direction == 'vertical')
+					var minUnity = unity.minHeight;
+				return parseInt(size * minUnity) + this.setFrameSpaceIncrement(size);
 			},
-			'height': function(){
-				return parseInt(this.vSize * unity.minHeight);
+			'getHeight': function(){
+				return this.getDimension(this.vSize, 'vertical');
+			},
+			'getUsedArea': function(){
+				return (this.hSize * unity.minWidth) * (this.vSize * unity.minHeight);
+			},
+			'getWidth': function(){
+				return this.getDimension(this.hSize, 'horizontal');
+			},
+			'setFrameSpaceIncrement': function(sizeToBeIncremented){
+				return (sizeToBeIncremented * fSpace) - 1;
 			}
 		};
 	}
 
 	function getFrameRandUnities(){
-		var unities = parseInt(Math.random() * 10);
-		if(unities && unities < 3)
-			return unities;
-		else
-			return getFrameRandUnities();
+		if(parseInt(Math.random() * 10) % 2 === 0)
+			return 2;
+		return 1;
 	}
 
-	function drawFrame(fSize, pos){
+	function drawFrame(fSize){
 		var fTag = document.createElement('div');
-		defineFramePosition(fTag);
 		defineFrameSize(fTag, fSize);
-		defineFrameCoords(fTag, fSize);
+		defineFramePositionType(fTag);
+		defineFramePosition(fTag, fSize);
 		defineFrameBackground(fTag);
 		return fTag;
 	}
 
-	function defineFramePosition(fTag){
+	function defineFrameSize(fTag, fSize){
+		fTag.style.width = fSize.getWidth()  + UNITY_OF_MEASURE;
+		fTag.style.height = fSize.getHeight()  + UNITY_OF_MEASURE;
+	}
+
+	function defineFramePositionType(fTag){
 		fTag.style.position = 'absolute';
 	}
 
-	function defineFrameSize(fTag, fSize){
-		fTag.style.width = fSize.width()  + UNITY_OF_MEASURE;
-		fTag.style.height = fSize.height()  + UNITY_OF_MEASURE;
+	function defineFramePosition(fTag, fSize){
+		var position = getFramePosition(fSize);
+		position ? setFramePosition(fTag, position) : setupFrames();
 	}
 
-	function defineFrameCoords(fTag, fSize){
-		var coords = getFrameCoords(fSize);
-		fTag.style.top = coords.y + UNITY_OF_MEASURE;
-		fTag.style.left = coords.x + UNITY_OF_MEASURE;
+	function setFramePosition(fTag, position){
+		fTag.style.top = position.y + UNITY_OF_MEASURE;
+		fTag.style.left = position.x + UNITY_OF_MEASURE;
 	}
 
 	function defineFrameBackground(fTag){
 		fTag.style.backgroundColor = DEFAULT_COLORS.FRAME_BACKGROUND;
 	}
 
-	function getFrameCoords(fSize){
+	function getFramePosition(fSize){
 		for (var i = 0; i < coords.length; i++) {
 			for (var j = 0; j < coords[i].length; j++)
-				if(coordsAreAvailable(coords, i, j, fSize))
-					return applyCoords(coords, fSize, i, j);
+				if(isPositionAvailable(i, j, fSize))
+					return applyPosition(fSize, i, j);
 		};
 	}
 
-	function coordsAreAvailable(coords, i, j, fSize){
-		return xCoordIsAvailable(coords, i, j, fSize.hSize)
-			&& yCoordIsAvailable(coords, i, j, fSize.vSize);
+	function isPositionAvailable(i, j, fSize){
+		return coordsAreAvailable(i, j, fSize) &&
+			!frameExceedsContainersBounds(i, j, fSize);
 	}
 
-	function xCoordIsAvailable(coords, i, j, hSize){
-		return coords[i][j].available && coords[i][j+hSize] && coords[i][j+hSize].available;
+	function coordsAreAvailable(i, j, fSize){
+		return isInitialCoordsAvailable(i, j) &&
+			isFinalCoordsAvailable(i, j, fSize);
 	}
 
-	function yCoordIsAvailable(coords, i, j, vSize){
-		return coords[i][j].available && coords[i+vSize] && coords[i+vSize][j] && coords[i+vSize][j].available;
+	function isInitialCoordsAvailable(i, j){
+		return coords[i][j].available;
 	}
 
-	function applyCoords(coords, fSize, i, j){
-		markCoordsAsUnavailable(coords, fSize, i, j)
+	function isFinalCoordsAvailable(i, j, fSize){
+		var vFinalCoord = true;
+		var hFinalCoord = true;
+		if(fSize.vSize > 1 && !isLastRow(i))
+			vFinalCoord = getFinalCoordsAvailability(coords[i+fSize.vSize-1][j]);
+		if(fSize.hSize > 1 && !isLastCol(j))
+			hFinalCoord = getFinalCoordsAvailability(coords[i][j+fSize.hSize-1]);
+		return vFinalCoord && hFinalCoord;
+	}
+
+	function getFinalCoordsAvailability(coords){
+		return coords.available;
+	}
+
+	function frameExceedsContainersBounds(i, j, fSize){
+		if(isLastRow(i) && isLastCol(j))
+			return fSize.hSize > 1 || fSize.vSize > 1;
+		else if(isLastRow(i))
+			return fSize.vSize > 1;
+		else if (isLastCol(j))
+			return fSize.hSize > 1;
+	}
+
+	function isLastRow(i){
+		return i === getLastIndex(coords);
+	}
+
+	function isLastCol(j){
+		return j === getLastIndex(coords[0]);
+	}
+
+	function getLastIndex(array){
+		return array.length - 1;
+	}
+
+	function applyPosition(fSize, i, j){
+		markCoordsAsUnavailable(fSize, i, j)
+		increaseUsedArea(fSize);
 		return coords[i][j];
 	}
 
-	function markCoordsAsUnavailable(coords, fSize, i, j){
+	function markCoordsAsUnavailable(fSize, i, j){
 		for (var v = i; v < i+fSize.vSize; v++){
 			for (var h = j; h < j+fSize.hSize; h++)
 				coords[v][h].available = false;
 		};
+	}
+
+	function increaseUsedArea(fSize){
+		usedArea += fSize.getUsedArea();
 	}
 
 	function renderFrame(fTag){
