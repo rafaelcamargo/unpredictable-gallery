@@ -37,7 +37,7 @@ var ugal = function(){
 	}
 
 	function setupMinUnityValues(){
-		unity.minWidth = getMinUnityValue(width, hLength)
+		unity.minWidth = getMinUnityValue(width, hLength);
 		unity.minHeight = getMinUnityValue(height, vLength);
 	}
 
@@ -85,7 +85,7 @@ var ugal = function(){
 			'getDimension': function(size, direction){
 				var minUnity = unity.minWidth;
 				if(direction == 'vertical')
-					var minUnity = unity.minHeight;
+					minUnity = unity.minHeight;
 				return parseInt(size * minUnity) + this.setFrameSpaceIncrement(size);
 			},
 			'getHeight': function(){
@@ -129,7 +129,10 @@ var ugal = function(){
 
 	function defineFramePosition(fTag, fSize){
 		var position = getFramePosition(fSize);
-		position ? setFramePosition(fTag, position) : setupFrames();
+		if(position)
+			setFramePosition(fTag, position);
+		else
+			setupFrames();
 	}
 
 	function setFramePosition(fTag, position){
@@ -146,7 +149,7 @@ var ugal = function(){
 			for (var j = 0; j < coords[i].length; j++)
 				if(isPositionAvailable(i, j, fSize))
 					return applyPosition(fSize, i, j);
-		};
+		}
 	}
 
 	function isPositionAvailable(i, j, fSize){
@@ -199,7 +202,7 @@ var ugal = function(){
 	}
 
 	function applyPosition(fSize, i, j){
-		markCoordsAsUnavailable(fSize, i, j)
+		markCoordsAsUnavailable(fSize, i, j);
 		increaseUsedArea(fSize);
 		return coords[i][j];
 	}
@@ -208,7 +211,7 @@ var ugal = function(){
 		for (var v = i; v < i+fSize.vSize; v++){
 			for (var h = j; h < j+fSize.hSize; h++)
 				coords[v][h].available = false;
-		};
+		}
 	}
 
 	function increaseUsedArea(fSize){
