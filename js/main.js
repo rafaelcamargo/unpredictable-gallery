@@ -15,9 +15,9 @@ function renderUgal(){
 		container: 'ugalContainer',
 		width: getWindowWidth(),
 		height: getUgalContainerHeight(),
-		hLength: 5,
-		vLength: 3,
-		fSpace: 1
+		hFrames: 5,
+		vFrames: 3,
+		fBorder: 1
 	});
 }
 
