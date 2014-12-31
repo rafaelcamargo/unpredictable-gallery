@@ -6,10 +6,11 @@ var ugal = function(){
 		FRAME_BACKGROUND: '#333'
 	};
 
-	var container, width, height, hLength, vLength, fSpace, coords, usedArea, unity;
+	var container, width, height, hLength, vLength, fSpace, usedArea, coords, images, unity;
 
 	function init(params){
 		resetParams(params);
+		hideRawImages();
 		setupContainer();
 		setupMinUnityValues();
 		setupPositionCoordinates();
@@ -25,7 +26,14 @@ var ugal = function(){
 		fSpace = params.fSpace;
 		usedArea = 0;
 		coords = [];
+		images = [];
 		unity = {};
+	}
+
+	function hideRawImages(){
+		images = document.querySelectorAll('img', container);
+		for (var i = 0; i < images.length; i++)
+			container.removeChild(images[i]);
 	}
 
 	function setupContainer(){
