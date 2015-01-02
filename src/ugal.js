@@ -6,26 +6,72 @@ var ugal = function(){
 		FRAME_BACKGROUND: '#333'
 	};
 
-	var container, width, height, hLength, vLength, fSpace, coords, usedArea, unity;
+	var container, width, height, hFrames, vFrames, fSpace, usedArea, coords, frames, unity, images;
 
 	function init(params){
-		resetParams(params);
+		resetUgal();
+		setParams(params);
+		buildImagesObj();
+		storeRawImagesSources();
 		setupContainer();
 		setupMinUnityValues();
 		setupPositionCoordinates();
 		setupFrames();
+		renderFrameImages();
+		positionFrameImages();
 	}
 
-	function resetParams(params){
+	function resetUgal(){
+		usedArea = 0;
+		coords = [];
+		frames = [];
+		unity = {};
+		images = {};
+	}
+
+	function setParams(params){
 		container = document.getElementById(params.container);
 		width = parseInt(params.width);
 		height = parseInt(params.height);
-		hLength = params.hLength;
-		vLength = params.vLength;
-		fSpace = params.fSpace;
-		usedArea = 0;
-		coords = [];
-		unity = {};
+		hFrames = params.hFrames || 5;
+		vFrames = params.vFrames || 3;
+		fSpace = params.fSpace || 1;
+	}
+
+	function buildImagesObj(){
+		images = {
+			'raw': getRawImages(),
+			'sources': [],
+			'list': [],
+			'calcCenteredMargin': function(parentTag, imgTag, dir){
+				var dim = dir == 'top' ? 'clientHeight' : 'clientWidth';
+				return parseInt(imgTag[dim]/-2 + parentTag[dim]/2) + UNITY_OF_MEASURE;
+			},
+			'center': function(parentTag, imgTag){
+				imgTag.style.marginTop = this.calcCenteredMargin(parentTag, imgTag, 'top');
+				imgTag.style.marginLeft = this.calcCenteredMargin(parentTag, imgTag, 'left');
+			},
+			'getSource': function(imgTag){
+				return imgTag.attributes[0].childNodes[0].nodeValue;
+			},
+			'setSource': function(imgTag, src){
+				imgTag.setAttribute('src',src);
+			},
+			'remove': function(imgTag){
+				imgTag.parentNode.removeChild(imgTag);
+			}
+		};
+	}
+
+	function getRawImages(){
+		return document.querySelectorAll('img', container);
+	}
+
+	function storeRawImagesSources(){
+		for (var i = 0; i < images.raw.length; i++){
+			images.sources.push(images.getSource(images.raw[i]));
+			images.remove(images.raw[i]);
+		}
 	}
 
 	function setupContainer(){
@@ -37,8 +83,8 @@ var ugal = function(){
 	}
 
 	function setupMinUnityValues(){
-		unity.minWidth = getMinUnityValue(width, hLength);
-		unity.minHeight = getMinUnityValue(height, vLength);
+		unity.minWidth = getMinUnityValue(width, hFrames);
+		unity.minHeight = getMinUnityValue(height, vFrames);
 	}
 
 	function getMinUnityValue(valType, val){
@@ -46,10 +92,10 @@ var ugal = function(){
 	}
 
 	function setupPositionCoordinates(){
-		for (var i = 0; i < vLength; i++){
+		for (var i = 0; i < vFrames; i++){
 			var line = [];
 			var y = (unity.minHeight * i) + (i*fSpace) + fSpace;
-			for (var j = 0; j < hLength; j++) {
+			for (var j = 0; j < hFrames; j++) {
 				var x = (unity.minWidth * j) + (j*fSpace) + fSpace;
 				line.push({
 					'x': x,
@@ -64,21 +110,23 @@ var ugal = function(){
 	function setupFrames(){
 		var fBuilt;
 		while(usedArea < getMaxPossibleArea()){
-			fBuilt = drawFrame(buildFrame());
-			if(fBuilt.style.top && fBuilt.style.left)
+			fBuilt = drawFrame(buildFrameObj());
+			if(fBuilt.style.top && fBuilt.style.left){
+				storeFrame(fBuilt);
 				renderFrame(fBuilt);
+			}
 		}
 	}
 
 	function getMaxPossibleFrames(){
-		return hLength * vLength;
+		return hFrames * vFrames;
 	}
 
 	function getMaxPossibleArea(){
-		return (unity.minWidth * hLength) * (unity.minHeight * vLength);
+		return (unity.minWidth * hFrames) * (unity.minHeight * vFrames);
 	}
 
-	function buildFrame(){
+	function buildFrameObj(){
 		return {
 			'hSize': getFrameRandUnities(),
 			'vSize': getFrameRandUnities(),
@@ -112,9 +160,8 @@ var ugal = function(){
 	function drawFrame(fSize){
 		var fTag = document.createElement('div');
 		defineFrameSize(fTag, fSize);
-		defineFramePositionType(fTag);
 		defineFramePosition(fTag, fSize);
-		defineFrameBackground(fTag);
+		defineFrameAppearance(fTag);
 		return fTag;
 	}
 
@@ -123,11 +170,8 @@ var ugal = function(){
 		fTag.style.height = fSize.getHeight()  + UNITY_OF_MEASURE;
 	}
 
-	function defineFramePositionType(fTag){
-		fTag.style.position = 'absolute';
-	}
-
 	function defineFramePosition(fTag, fSize){
+		fTag.style.position = 'absolute';
 		var position = getFramePosition(fSize);
 		if(position)
 			setFramePosition(fTag, position);
@@ -140,8 +184,9 @@ var ugal = function(){
 		fTag.style.left = position.x + UNITY_OF_MEASURE;
 	}
 
-	function defineFrameBackground(fTag){
+	function defineFrameAppearance(fTag){
 		fTag.style.backgroundColor = DEFAULT_COLORS.FRAME_BACKGROUND;
+		fTag.style.overflow = 'hidden';
 	}
 
 	function getFramePosition(fSize){
@@ -220,6 +265,39 @@ var ugal = function(){
 
 	function renderFrame(fTag){
 		container.appendChild(fTag);
+	}
+
+	function storeFrame(frame){
+		frames.push(frame);
+	}
+
+	function renderFrameImages(){
+		var j;
+		for (var i = 0; i < frames.length; i++){
+			j = images.sources[i] ? i : filterImageSourceIndex(j);
+			appendImageOnFrame(i ,j);
+			j++;
+		}
+	}
+
+	function filterImageSourceIndex(imgSrcIndex){
+		return images.sources[imgSrcIndex] ? imgSrcIndex : 0;
+	}
+
+	function appendImageOnFrame(frmTagIndex, imgSrcIndex){
+		frames[frmTagIndex].appendChild(buildFrameImageTag(images.sources[imgSrcIndex]));
+	}
+
+	function buildFrameImageTag(imgUrl){
+		var fImg = document.createElement('img');
+		images.setSource(fImg, imgUrl);
+		images.list.push(fImg);
+		return fImg;
+	}
+
+	function positionFrameImages(){
+		for (var i = 0; i < frames.length; i++)
+			images.center(frames[i], images.list[i]);
 	}
 
 	return {
