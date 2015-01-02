@@ -6,7 +6,7 @@ var ugal = function(){
 		FRAME_BACKGROUND: '#333'
 	};
 
-	var container, width, height, hFrames, vFrames, fBorder, usedArea, coords, frames, unity, images;
+	var container, width, height, hFrames, vFrames, fSpace, usedArea, coords, frames, unity, images;
 
 	function init(params){
 		resetUgal();
@@ -18,6 +18,7 @@ var ugal = function(){
 		setupPositionCoordinates();
 		setupFrames();
 		renderFrameImages();
+		positionFrameImages();
 	}
 
 	function resetUgal(){
@@ -32,15 +33,24 @@ var ugal = function(){
 		container = document.getElementById(params.container);
 		width = parseInt(params.width);
 		height = parseInt(params.height);
-		hFrames = params.hFrames;
-		vFrames = params.vFrames;
-		fBorder = params.fBorder;
+		hFrames = params.hFrames || 5;
+		vFrames = params.vFrames || 3;
+		fSpace = params.fSpace || 1;
 	}
 
 	function buildImagesObj(){
 		images = {
 			'raw': getRawImages(),
 			'sources': [],
+			'list': [],
+			'calcCenteredMargin': function(parentTag, imgTag, dir){
+				var dim = dir == 'top' ? 'clientHeight' : 'clientWidth';
+				return parseInt(imgTag[dim]/-2 + parentTag[dim]/2) + UNITY_OF_MEASURE;
+			},
+			'center': function(parentTag, imgTag){
+				imgTag.style.marginTop = this.calcCenteredMargin(parentTag, imgTag, 'top');
+				imgTag.style.marginLeft = this.calcCenteredMargin(parentTag, imgTag, 'left');
+			},
 			'getSource': function(imgTag){
 				return imgTag.attributes[0].childNodes[0].nodeValue;
 			},
@@ -78,15 +88,15 @@ var ugal = function(){
 	}
 
 	function getMinUnityValue(valType, val){
-		return parseInt(valType/val) - fBorder;
+		return parseInt(valType/val) - fSpace;
 	}
 
 	function setupPositionCoordinates(){
 		for (var i = 0; i < vFrames; i++){
 			var line = [];
-			var y = (unity.minHeight * i) + (i*fBorder) + fBorder;
+			var y = (unity.minHeight * i) + (i*fSpace) + fSpace;
 			for (var j = 0; j < hFrames; j++) {
-				var x = (unity.minWidth * j) + (j*fBorder) + fBorder;
+				var x = (unity.minWidth * j) + (j*fSpace) + fSpace;
 				line.push({
 					'x': x,
 					'y': y,
@@ -136,7 +146,7 @@ var ugal = function(){
 				return this.getDimension(this.hSize, 'horizontal');
 			},
 			'setFrameSpaceIncrement': function(sizeToBeIncremented){
-				return (sizeToBeIncremented * fBorder) - 1;
+				return (sizeToBeIncremented * fSpace) - 1;
 			}
 		};
 	}
@@ -262,20 +272,32 @@ var ugal = function(){
 	}
 
 	function renderFrameImages(){
-		for (var i = 0; i < frames.length; i++)
-			frames[i].appendChild(buildFrameImageTag(builFrameImageTagSource(i)));
+		var j;
+		for (var i = 0; i < frames.length; i++){
+			j = images.sources[i] ? i : filterImageSourceIndex(j);
+			appendImageOnFrame(i ,j);
+			j++;
+		}
+	}
+
+	function filterImageSourceIndex(imgSrcIndex){
+		return images.sources[imgSrcIndex] ? imgSrcIndex : 0;
+	}
+
+	function appendImageOnFrame(frmTagIndex, imgSrcIndex){
+		frames[frmTagIndex].appendChild(buildFrameImageTag(images.sources[imgSrcIndex]));
 	}
 
 	function buildFrameImageTag(imgUrl){
 		var fImg = document.createElement('img');
 		images.setSource(fImg, imgUrl);
+		images.list.push(fImg);
 		return fImg;
 	}
 
-	function builFrameImageTagSource(i){
-		if(images.sources[i])
-			return images.sources[i];
-		return builFrameImageTagSource(--i);
+	function positionFrameImages(){
+		for (var i = 0; i < frames.length; i++)
+			images.center(frames[i], images.list[i]);
 	}
 
 	return {
