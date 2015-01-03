@@ -1,12 +1,28 @@
 var ugal = function(){
 
 	var UNITY_OF_MEASURE = 'px';
-	var DEFAULT_COLORS = {
-		CONTAINER_BACKGROUND: '#000',
-		FRAME_BACKGROUND: '#333'
-	};
+	var COLORS = {
+		'none': {
+			'colors': ['#000000','#333333']
+		},
+		'blumenau': {
+			'colors': ['#FF491A','#FF3399']
+		},
+		'floripa': {
+			'colors': ['#00AACC','#003399']
+		},
+		'joinville': {
+			'colors': ['#9FAFCF','#5C6C88']
+		},
+		'lages': {
+			'colors': ['#00CC44','#008D8D']
+		},
+		'getGradient': function(){
+			return '-45deg, ' + this[theme].colors[0] + ' 0%, ' +  this[theme].colors[1] + ' 100%';
+		}
+	}
 
-	var container, width, height, hFrames, vFrames, fSpace, usedArea, coords, frames, unity, images;
+	var container, width, height, hFrames, vFrames, fSpace, theme, usedArea, coords, frames, unity, images;
 
 	function init(params){
 		resetUgal();
@@ -17,8 +33,10 @@ var ugal = function(){
 		setupMinUnityValues();
 		setupPositionCoordinates();
 		setupFrames();
-		renderFrameImages();
-		positionFrameImages();
+		if(images.raw.length)
+			printImages();
+		else
+			paintGallery();
 	}
 
 	function resetUgal(){
@@ -36,6 +54,7 @@ var ugal = function(){
 		hFrames = params.hFrames || 5;
 		vFrames = params.vFrames || 3;
 		fSpace = params.fSpace || 1;
+		theme = params.theme || 'none';
 	}
 
 	function buildImagesObj(){
@@ -75,11 +94,21 @@ var ugal = function(){
 	}
 
 	function setupContainer(){
+		emptyContainer();
+		styleContainer();
+	}
+
+	function emptyContainer(){
+		var tags = document.querySelectorAll('div > div', container);
+		for (var i = 0; i < tags.length; i++)
+			container.removeChild(tags[i]);
+	}
+
+	function styleContainer(){
 		container.style.position = 'relative';
 		container.style.width = width + UNITY_OF_MEASURE;
 		container.style.height = height + UNITY_OF_MEASURE;
-		if(!container.style.backgroundColor)
-			container.style.backgroundColor = DEFAULT_COLORS.CONTAINER_BACKGROUND;
+		container.style.backgroundColor = COLORS[theme].colors[0];
 	}
 
 	function setupMinUnityValues(){
@@ -185,7 +214,7 @@ var ugal = function(){
 	}
 
 	function defineFrameAppearance(fTag){
-		fTag.style.backgroundColor = DEFAULT_COLORS.FRAME_BACKGROUND;
+		fTag.style.backgroundColor = COLORS[theme].colors[1];
 		fTag.style.overflow = 'hidden';
 	}
 
@@ -271,6 +300,11 @@ var ugal = function(){
 		frames.push(frame);
 	}
 
+	function printImages(){
+		renderFrameImages();
+		positionFrameImages();
+	}
+
 	function renderFrameImages(){
 		var j;
 		for (var i = 0; i < frames.length; i++){
@@ -298,6 +332,41 @@ var ugal = function(){
 	function positionFrameImages(){
 		for (var i = 0; i < frames.length; i++)
 			images.center(frames[i], images.list[i]);
+	}
+
+	function paintGallery(){
+		for (var i = 0; i < frames.length; i++)
+			setFrameBackground(frames[i]);
+		setContainerBackground();
+	}
+
+	function setFrameBackground(frmTag){
+		frmTag.style.backgroundColor = '#fff';
+		frmTag.style.opacity = '0.35';
+	}
+
+	function setContainerBackground(){
+		var prefix = getBrowserPrefix('backgroundImage');
+		var val = getGradientValues();
+		if(prefix)
+			container.style.backgroundImage = prefix + val;
+		else
+			container.style.backgroundColor = THEMES[theme].colors[1];
+	}
+
+	function getBrowserPrefix(styleAttr){
+		var el = document.createElement('div');
+		var prefix = ['-o-', '-ms-', '-moz-', '-webkit-']
+		for (var i = 0; i < prefix.length; i++) {
+			el.style[styleAttr] = prefix[i] + getGradientValues();
+			if (el.style[styleAttr])
+			    return prefix[i];
+			el.style[styleAttr] = '';
+		}
+	}
+
+	function getGradientValues(){
+		return 'linear-gradient(' + COLORS.getGradient() + ')';
 	}
 
 	return {
