@@ -13,7 +13,7 @@ function renderUgal(){
 	ugal.init({
 		container: 'ugalContainer',
 		width: window.innerWidth,
-		height: window.innerHeight*0.8,
+		height: window.innerHeight*0.7,
 		theme: getTheme(THEMES)
 	});
 

@@ -5,17 +5,17 @@ var ugal = function(){
 		'none': {
 			'colors': ['#000000','#333333']
 		},
-		'blumenau': {
-			'colors': ['#FF491A','#FF3399']
+		'joinville': {
+			'colors': ['#660A62','#1C0152']
 		},
 		'floripa': {
-			'colors': ['#00AACC','#003399']
+			'colors': ['#00AACC','#00954B']
 		},
-		'joinville': {
-			'colors': ['#9FAFCF','#5C6C88']
+		'blumenau': {
+			'colors': ['#FFBB1A','#FF0000']
 		},
 		'lages': {
-			'colors': ['#00CC44','#008D8D']
+			'colors': ['#7ACC29','#15CC3A']
 		},
 		'getGradient': function(){
 			return '-45deg, ' + this[theme].colors[0] + ' 0%, ' +  this[theme].colors[1] + ' 100%';
