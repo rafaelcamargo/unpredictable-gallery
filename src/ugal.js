@@ -5,16 +5,16 @@ var ugal = function(){
 		'none': {
 			'colors': ['#000000','#333333']
 		},
-		'joinville': {
+		'Joinville': {
 			'colors': ['#660A62','#1C0152']
 		},
-		'floripa': {
+		'Floripa': {
 			'colors': ['#00AACC','#00954B']
 		},
-		'blumenau': {
+		'Blumenau': {
 			'colors': ['#FFBB1A','#FF0000']
 		},
-		'lages': {
+		'Lages': {
 			'colors': ['#7ACC29','#15CC3A']
 		},
 		'getGradient': function(){
