@@ -16,7 +16,7 @@ var rotateThemes = function(){
 	function presentCurrentTheme(){
 		renderTheme();
 		printThemeTitle();
-		centerThemeTitle()
+		centerThemeTitle();
 		updateCurrentTheme();
 	}
 
@@ -43,12 +43,12 @@ var rotateThemes = function(){
 	}
 
 	function updateCurrentTheme(){
-		currTheme < 3 ? currTheme++ : currTheme = 0;
+		currTheme = currTheme < 3 ? ++currTheme : 0;
 		setTimeout(presentCurrentTheme, 3000);
 	}
 
 	init();
 
-}
+};
 
 window.onload = rotateThemes;

@@ -6,6 +6,6 @@ var renderImageGallery = function(){
 		height: window.innerHeight
 	});
 
-}
+};
 
 window.onload = renderImageGallery;

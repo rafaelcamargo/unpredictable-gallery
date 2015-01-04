@@ -20,7 +20,7 @@ var ugal = function(){
 		'getGradient': function(){
 			return '-45deg, ' + this[theme].colors[0] + ' 0%, ' +  this[theme].colors[1] + ' 100%';
 		}
-	}
+	};
 
 	var container, width, height, hFrames, vFrames, fSpace, theme, usedArea, coords, frames, unity, images;
 
@@ -356,7 +356,7 @@ var ugal = function(){
 
 	function getBrowserPrefix(styleAttr){
 		var el = document.createElement('div');
-		var prefix = ['-o-', '-ms-', '-moz-', '-webkit-']
+		var prefix = ['-o-', '-ms-', '-moz-', '-webkit-'];
 		for (var i = 0; i < prefix.length; i++) {
 			el.style[styleAttr] = prefix[i] + getGradientValues();
 			if (el.style[styleAttr])
