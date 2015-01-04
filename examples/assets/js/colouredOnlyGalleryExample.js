@@ -31,11 +31,6 @@ var rotateThemes = function(){
 
 	function printThemeTitle(){
 		themeTitleContainer.innerText = THEMES[currTheme];
-		//themeTitleContainer.innerText = captalize(THEMES[currTheme]);
-	}
-
-	function captalize(word){
-		return word[0].toUpperCase() + word.substring(1);
 	}
 
 	function centerThemeTitle(){
