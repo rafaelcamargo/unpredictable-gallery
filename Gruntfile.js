@@ -7,16 +7,17 @@ module.exports = function(grunt) {
     },
     uglify: {
       options: {
-        banner: '/****************************************************\n' +
-                '<%= pkg.name %> v<%= pkg.version %>\n' +
-                '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                'Fork me on Github:\n' +
-                'https://github.com/rafaelcamargo/unpredictablegallery\n' +
-                '*****************************************************/\n'
+        banner: '/*\n' +
+                '* <%= pkg.name %> v<%= pkg.version %> ' +
+                '(<%= grunt.template.today("yyyy-mm-dd") %>)\n' +
+                '* License: <%= pkg.license %>\n' +
+                '* Url: <%= pkg.url %>\n' +
+                '* Repository: <%= pkg.repository.url %>\n' +
+                '*/\n'
       },
       my_target: {
         files: {
-          'releases/<%= pkg.name %>-<%= pkg.version %>.min.js': ['src/ugal.js']
+          'releases/ugal-<%= pkg.version %>.min.js': ['src/ugal.js']
         }
       }
     }
