@@ -17,7 +17,7 @@ module.exports = function(grunt) {
       },
       my_target: {
         files: {
-          'releases/<%= pkg.name %>-<%= pkg.version %>.min.js': ['src/ugal.js']
+          'releases/ugal-<%= pkg.version %>.min.js': ['src/ugal.js']
         }
       }
     },

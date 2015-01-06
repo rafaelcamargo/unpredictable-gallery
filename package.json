@@ -1,11 +1,11 @@
 {
   "name": "Ugal",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "MIT",
   "url": "http://rafaelcamargo.com/pro/ugal/welcome",
   "repository": {
-  	"type": "git",
-  	"url": "https://github.com/rafaelcamargo/unpredictablegallery"
+    "type": "git",
+    "url": "https://github.com/rafaelcamargo/unpredictablegallery"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
