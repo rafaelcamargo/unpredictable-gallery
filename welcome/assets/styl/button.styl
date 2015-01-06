@@ -1,0 +1,29 @@
+@require 'var'
+@require 'func'
+
+.btn
+	display block
+	padding 0 10px
+	width 100%
+	background-color transparent
+	color $color-grey
+	text-align center
+	text-decoration none
+	line-height 50px
+	white-space nowrap
+	text-overflow ellipsis
+	overflow hidden
+	box-sizing border-box
+	border-width 1px
+	border-style solid
+	border-color $color-grey
+	cursor pointer
+	roundBorder(3)
+	&:hover
+		background-color alpha($color-grey, 0.3)
+
+.btn.light
+	color $color-white
+	border-color $color-white
+	&:hover
+		background-color alpha($color-white, 0.3)

@@ -20,11 +20,26 @@ module.exports = function(grunt) {
           'releases/ugal-<%= pkg.version %>.min.js': ['src/ugal.js']
         }
       }
+    },
+    stylus: {
+      compile: {
+        files: {
+          'welcome/assets/css/main.css': ['welcome/assets/styl/*.styl']
+        }
+      }
+    },
+    watch: {
+      css: {
+        files: 'welcome/assets/styl/*.styl',
+        tasks: ['stylus']
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-stylus');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('default', ['jshint']);
 };
