@@ -45,7 +45,7 @@ ugal.init({
 
 ##### theme
 
-If you were looking for a non black/grey colour based gallery, you can specify some themes. They are *Blumenau*, *Floripa*, *Joinville* and *Lages*. You can see how they look like on the [Project's Page](http://rafaelcamargo.com/pro/ugal) or accessing the project's examples folder.
+If you were looking for a non black/grey colour based gallery, you can specify some themes. They are *Blumenau*, *Floripa*, *Joinville* and *Lages*. You can see how they look like on the [Project's Page](http://rafaelcamargo.com/pro/ugal/welcome) or accessing the project's examples folder.
 
 ``` javascript
 ugal.init({
@@ -57,7 +57,7 @@ ugal.init({
 
 ### Where to find it
 
-You can see it up and running on the [Project's Page](http://rafaelcamargo.com/pro/ugal)
+You can see it up and running on the [Project's Page](http://rafaelcamargo.com/pro/ugal/welcome)
 
 ### Release History
 
