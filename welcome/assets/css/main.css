@@ -1,2 +1,6 @@
-body,h1,h2,h3,h4,h5,h6,p{margin:0;padding:0;font-family:'Arial',sans-serif}
-h1,h2,h3{letter-spacing:-1px}.theme-title{position:absolute;color:#fff;z-index:10}
+.btn{display:block;padding:0 10px;width:100%;background-color:transparent;color:#666;text-align:center;text-decoration:none;line-height:50px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;box-sizing:border-box;border-width:1px;border-style:solid;border-color:#666;cursor:pointer;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;}.btn:hover{background-color:rgba(102,102,102,0.3)}.btn.light{color:#fff;border-color:#fff;}.btn.light:hover{background-color:rgba(255,255,255,0.3)}
+code[class*="language-"],pre[class*="language-"]{font-size:14px;line-height:normal}
+.text-center{text-align:center}.is-hidden{display:none}
+.gg-container{width:90%;padding-bottom:100px}.header{position:absolute;z-index:10}
+body,h1,h2,h3,h4,h5,h6,p{margin:0;padding:0;font-family:'Arial',sans-serif}p{line-height:1.5}
+h1,h2,h3{letter-spacing:-1px}.header h1{color:#fff}

@@ -2,20 +2,154 @@
 <html>
 <head>
 	<title></title>
-	<script type="text/javascript" src="assets/js/lib/cookie.js"></script>
-	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
+	<script type="text/javascript" src="../releases/ugal-0.2.1.min.js"></script>
+	<script type="text/javascript" src="assets/js/welcome.js"></script>
 	<link rel="stylesheet" type="text/css" href="assets/css/lib/prism.css">
+	<link rel="stylesheet" type="text/css"
+		href="assets/css/lib/ggrid-v0.1.0.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
 </head>
 <body>
-	<h1>Unpredictable Gallery</h1>
 
-	<pre><code class="language-javascript">
+	<div class="gg-container header" id="pageHeaderContainer">
+		<div class="gg-row">
+			<div class="gg-col-12">
+				<h1 class="text-center">Unpredictable Gallery</h1>
+			</div>
+		</div>
+		<div class="gg-row gg-voff-3">
+			<div class="gg-col-3 gg-hoff-3">
+				<a href="https://raw.githubusercontent.com/rafaelcamargo/
+					unpredictablegallery/master/releases/ugal-0.2.1.min.js"
+					class="btn light" target="_blank">
+					Download v0.2.1 (4.56kb)
+				</a>
+			</div>
+			<div class="gg-col-3">
+				<a href="https://github.com/rafaelcamargo/unpredictablegallery"
+					class="btn light" target="_blank">
+					Fork me on <strong>Github</strong>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div id="ugalContainer" style="width:100%"></div>
+
+	<div class="gg-container gg-voff-5">
+		<div class="gg-row">
+			<div class="gg-col-12">
+				<h2>What it is</h2>
+			</div>
+		</div>
+		<div class="gg-row gg-voff-2">
+			<div class="gg-col-12">
+				<p>
+					Ugal (Unpredictable Gallery) is the solution I have found to
+					build a random tetris-based image gallery. Each time Ugal is
+					initialized, its frames are randomly dimensioned and
+					organized.
+				</p>
+			</div>
+		</div>
+		<div class="gg-row gg-voff-4">
+			<div class="gg-col-12">
+				<h2>How to use it</h2>
+			</div>
+		</div>
+		<div class="gg-row gg-voff-2">
+			<div class="gg-col-12">
+				<h3>Basics</h3>
+			</div>
+		</div>
+		<div class="gg-row gg-voff-2">
+			<div class="gg-col-12">
+				<p>
+					Ugal is ridiculously easy to use. You don't need any
+					specific lib or special effects installed in your
+					site/application. Just identify a container in your HTML
+					and call ugal.init(), in your javascript, passing an object
+					with three required attributes (container, width and height)
+					 as you can see below:
+				</p>
+			</div>
+		</div>
+		<div class="gg-row gg-voff-2">
+			<div class="gg-col-6">
+				<pre><code class="language-markup">
+					<script type="prism-html-markup">
+<div id='container'>
+  <img src='sample-image.jpg' />
+  <img src='another-sample-image.jpg' />
+  ...
+</div>
+					</script>
+				</code></pre>
+			</div>
+			<div class="gg-col-6">
+				<pre>
+					<code class="language-javascript">
 ugal.init({
 	container: 'container',
 	width: 800,
 	height: 600
 });
-	</code></pre>
+					</code>
+				</pre>
+			</div>
+		</div>
+		<div class="gg-row gg-voff-2">
+			<div class="gg-col-12">
+				<h3>Options</h3>
+			</div>
+		</div>
+		<div class="gg-row gg-voff-2">
+			<div class="gg-col-6">
+				<h4>hFrames, vFrames</h4>
+				<p>
+					You can define the number of frames to be shown on gallery 
+					using the attributes <i>hFrames</i> and <i>vFrames</i> to 
+					inform the maximum number of horizontal and vertical frames, 
+					respectively:
+				</p>
+			</div>
+			<div class="gg-col-6">
+				<h4>theme</h4>
+				<p>
+					If you were looking for a non black/grey colour based 
+					gallery, you can specify some themes. They are 
+					<i>Blumenau</i>, <i>Floripa</i>, <i>Joinville</i> and 
+					<i>Lages</i>.
+				</p>
+			</div>
+		</div>
+		<div class="gg-row gg-voff-2">
+			<div class="gg-col-6">
+				<pre>
+					<code class="language-javascript">
+ugal.init({
+	container: 'container',
+	width: 800,
+	height: 600,
+	hFrames: 5,
+	vFrames: 3
+});
+					</code>
+				</pre>
+			</div>
+			<div class="gg-col-6">
+				<pre>
+					<code class="language-javascript">
+ugal.init({
+	...
+	vFrames: 3,
+	theme: 'Joinville'
+});
+					</code>
+				</pre>
+			</div>
+		</div>
+	</div>
 
 	<script type="text/javascript" src="assets/js/lib/prism.js"></script>
 </body>
