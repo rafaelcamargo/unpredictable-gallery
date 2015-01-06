@@ -99,9 +99,7 @@ var ugal = function(){
 	}
 
 	function emptyContainer(){
-		var tags = document.querySelectorAll('div > div', container);
-		for (var i = 0; i < tags.length; i++)
-			container.removeChild(tags[i]);
+		container.innerHTML = "";
 	}
 
 	function styleContainer(){
