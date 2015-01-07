@@ -61,6 +61,6 @@ You can see it up and running on the [Project's Page](http://rafaelcamargo.com/p
 
 ### Release History
 
-- 2015/02/05 **v0.2.1** : Fixed wrong behavior of the function emptyContainer (issue#12)
-- 2015/02/04 **v0.2.0** : Added the *Coloured-Only Gallery* feature (issue#6)
-- 2015/02/01 **v0.1.0** : First stable development version 
+- 2015/01/05 **v0.2.1** : Fixed wrong behavior of the function emptyContainer (issue#12)
+- 2015/01/04 **v0.2.0** : Added the *Coloured-Only Gallery* feature (issue#6)
+- 2015/01/02 **v0.1.0** : First stable development version 
