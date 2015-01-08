@@ -16,7 +16,7 @@ function welcome(){
 	function renderUgal(){
 		ugal.init({
 			container: ugalContainer.id,
-			width: window.innerWidth-17,
+			width: document.body.clientWidth,
 			height: window.innerHeight*0.8,
 			theme: 'Floripa'
 		});
