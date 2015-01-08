@@ -16,7 +16,7 @@ var rotateThemes = function(){
 	function presentCurrentTheme(){
 		renderTheme();
 		printThemeTitle();
-		centerThemeTitle();
+		setupThemeTitle();
 		updateCurrentTheme();
 	}
 
@@ -33,7 +33,10 @@ var rotateThemes = function(){
 		themeTitleContainer.innerText = THEMES[currTheme];
 	}
 
-	function centerThemeTitle(){
+	function setupThemeTitle(){
+		themeTitleContainer.style.color = '#FFF';
+		themeTitleContainer.style.position = 'absolute';
+		themeTitleContainer.style.zIndex = 10;
 		themeTitleContainer.style.marginLeft = getThemeTitleCenteredMargin('clientWidth');
 		themeTitleContainer.style.marginTop = getThemeTitleCenteredMargin('clientHeight');
 	}
