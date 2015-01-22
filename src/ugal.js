@@ -22,10 +22,11 @@ var ugal = function(){
 		}
 	};
 
-	var container, width, height, hFrames, vFrames, fSpace, theme, usedArea, coords, frames, unity, images;
+	var container, width, height, hFrames, vFrames, fSpace, theme, usedArea, coords, frames, unity,
+		images;
 
 	function init(params){
-		resetUgal();
+		resetUgal(params);
 		setParams(params);
 		buildImagesObj();
 		storeRawImagesSources();
@@ -39,7 +40,8 @@ var ugal = function(){
 			paintGallery();
 	}
 
-	function resetUgal(){
+	function resetUgal(params){
+		resetContainerStyles(params);
 		usedArea = 0;
 		coords = [];
 		frames = [];
@@ -47,14 +49,23 @@ var ugal = function(){
 		images = {};
 	}
 
-	function setParams(params){
+	function resetContainerStyles(params){
 		container = document.getElementById(params.container);
-		width = parseInt(params.width);
-		height = parseInt(params.height);
+		container.style.cssText = "";
+	}
+
+	function setParams(params){
+		width = getContainerSize('width', params, container);
+		height = getContainerSize('height', params, container);
 		hFrames = params.hFrames || 5;
 		vFrames = params.vFrames || 3;
 		fSpace = params.fSpace || 1;
 		theme = params.theme || 'none';
+	}
+
+	function getContainerSize(orientation, params, container){
+		var clientSize = orientation == 'width' ? 'clientWidth' : 'clientHeight';
+		return params[orientation] || container[clientSize] || 200;
 	}
 
 	function buildImagesObj(){

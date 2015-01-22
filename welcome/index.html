@@ -4,7 +4,8 @@
 	<title>Unpredictable Gallery: A random tetris-based image gallery</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="HandheldFriendly" content="true" />
-	<script type="text/javascript" src="../releases/ugal-0.2.1.min.js"></script>
+	<script type="text/javascript" src="../src/ugal.js"></script>
+	<!--script type="text/javascript" src="../releases/ugal-0.2.1.min.js"></script-->
 	<script type="text/javascript" src="assets/js/welcome.js"></script>
 	<link rel="stylesheet" type="text/css" href="assets/css/lib/prism.css">
 	<link rel="stylesheet" type="text/css"
@@ -36,7 +37,7 @@
 		</div>
 	</div>
 
-	<div id="ugalContainer" style="width:100%"></div>
+	<div id="ugalContainer" class="ugal-container"></div>
 
 	<div class="gg-container gg-voff-5">
 		<div class="gg-row">
@@ -152,6 +153,16 @@ ugal.init({
 			</div>
 		</div>
 	</div>
+
+	<div id="footer">
+		<div class="gg-container">
+			<div class="gg-row gg-voff-4">
+				<div class="gg-col-12"></div>
+			</div>
+		</div>
+	</div>
+
+
 
 	<script type="text/javascript" src="assets/js/lib/prism.js"></script>
 </body>
