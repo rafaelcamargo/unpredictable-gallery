@@ -3,7 +3,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     jshint: {
-      files: ['Gruntfile.js', 'src/*.js', 'examples/assets/js/*.js']
+      files: [
+        'Gruntfile.js',
+        'src/**/*.js',
+        'tests/**/*.js',
+        'welcome/**/*.js',
+        '!welcome/assets/js/lib/*.js'
+      ]
     },
     uglify: {
       options: {
@@ -33,6 +39,17 @@ module.exports = function(grunt) {
         files: 'welcome/assets/styl/*.styl',
         tasks: ['stylus']
       }
+    },
+    karma: {
+      options: {
+        frameworks: ['jasmine'],
+        singleRun: true,
+        autoWatch: false,
+        files: ['src/ugal.js', 'tests/**/*.test.js']
+      },
+      unit: {
+        browsers: ['PhantomJS']
+      }
     }
   });
 
@@ -40,6 +57,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-stylus');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('default', ['jshint']);
+  grunt.registerTask('test', ['jshint', 'karma']);
 };
