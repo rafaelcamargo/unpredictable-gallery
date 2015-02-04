@@ -1,5 +1,7 @@
 # Unpredictable Gallery v0.2.1
 
+[![Code Climate](https://codeclimate.com/repos/54d21ab269568078e0000eb9/badges/1ffd4043c9ff0d54a5cb/gpa.svg)](https://codeclimate.com/repos/54d21ab269568078e0000eb9/feed)
+
 ### What it is
 Ugal (Unpredictable Gallery) is the solution I have found to build a random tetris-based image gallery.
 Each time Ugal is initialized, its frames are randomly dimensioned and organized.
