@@ -47,6 +47,11 @@ module.exports = function(grunt) {
         autoWatch: false,
         files: ['src/ugal.js', 'tests/**/*.test.js']
       },
+      reporters: ['progress', 'coverage'],
+      coverageReporter: {
+        type: 'html',
+        dir: 'coverage/'
+      },
       unit: {
         browsers: ['PhantomJS']
       }
@@ -60,5 +65,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('default', ['jshint']);
-  grunt.registerTask('test', ['jshint', 'karma']);
+  grunt.registerTask('test', ['karma']);
 };
