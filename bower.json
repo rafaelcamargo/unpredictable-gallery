@@ -1,0 +1,22 @@
+{
+  "name": "ugal",
+  "version": "0.2.1",
+  "homepage": "https://github.com/rafaelcamargo/unpredictablegallery",
+  "authors": [
+    "Rafael Camargo <contato@rafaelcamargo.com>"
+  ],
+  "description": "Unpredictable Gallery",
+  "main": "src/ugal.js",
+  "keywords": [
+    "image",
+    "gallery"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
